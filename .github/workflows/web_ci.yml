@@ -42,7 +42,7 @@ jobs:
       - run: git config --global user.name  "Julia"
       - run: git config --global user.email "avdasyovajulia@gmail.com"
       - run: git status
-      - run: git remote add origin https://github.com/Julia-Avdasyova/Julia-Avdasyova.github.io.git
+      - run: git remote add origin https://${{ secrets.ACCESS_TOKEN }}@github.com/Julia-Avdasyova/julia-avdasyova.github.io.git
       - run: git checkout -b master
       - run: git add --all
       - run: git diff-index --quiet HEAD || git commit -m "Updated personal website"
