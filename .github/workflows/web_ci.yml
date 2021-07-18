@@ -42,7 +42,7 @@ jobs:
           git init
           git config --global user.name  "Julia"
           git config --global user.email "avdasyovajulia@gmail.com"
-          git status
+
           git remote add origin https://${{ secrets.ACCESS_TOKEN }}@github.com/Julia-Avdasyova/Julia-Avdasyova.github.io.git
           git checkout -b master
           git add --all
