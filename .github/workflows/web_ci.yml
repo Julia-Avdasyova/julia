@@ -1,0 +1,50 @@
+name: Build & upload to GitHub pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    name: Build Flutter (Web)
+    env:
+      my_secret: ${{secrets.ACCESS_TOKEN}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: subosito/flutter-action@v1
+        with:
+          channel: 'stable'
+      - run: flutter config --enable-web
+      - run: flutter pub get
+      - run: flutter build web --release
+
+      - name: Archive Production Artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: web-build
+          path: build/web
+
+      - name: Download Artifact
+        uses: actions/download-artifact@master
+        with:
+          name: web-build
+
+      - name: Display structure of build files
+        run: ls -R
+        working-directory: ./web
+
+      - name: Deploy to GitHub Pages
+        run: |
+          cd build/web
+          git init
+          git config --global user.name  "Julia"
+          git config --global user.email "avdasyovajulia@gmail.com"
+          git status
+          git remote add origin https://${{ secrets.ACCESS_TOKEN }}@github.com/Julia-Avdasyova/Julia-Avdasyova.github.io.git
+          git checkout -b master
+          git add --all
+          git diff-index --quiet HEAD || git commit -m "Updated personal website"
+          git push --force origin master
